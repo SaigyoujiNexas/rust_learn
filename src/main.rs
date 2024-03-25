@@ -15,6 +15,17 @@ impl<T> Deref for MyBox<T> {
         &self.0
     }
 }
+
+struct CustomSmatPointer{
+    data: String,
+}
+
+impl Drop for CustomSmatPointer {
+    fn drop(&mut self) {
+        println!("Dropping CustomSmatPointer with data `{}`!", self.data);
+    }
+}
+
 fn main() {
     let x = 5;
     let y = Box::new(x);
@@ -22,4 +33,12 @@ fn main() {
     let a = 3;
     let b = MyBox::new(a);
     assert_eq!(3, *b);
+    let c = CustomSmatPointer{
+        data: String::from("my stuff"),
+    };
+    drop(c);
+    let d = CustomSmatPointer{
+        data: String::from("other stuff"),
+    };
+    println!("CustomSmatPointer created");
 }
