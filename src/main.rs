@@ -1,44 +1,36 @@
-use std::ops::Deref;
-
-struct MyBox<T>(T);
-
-impl<T> MyBox<T> {
-    fn new(x: T) -> MyBox<T> {
-        MyBox(x)
-    }
-}
-
-impl<T> Deref for MyBox<T> {
-    type Target = T;
-
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
-
-struct CustomSmatPointer{
-    data: String,
-}
-
-impl Drop for CustomSmatPointer {
-    fn drop(&mut self) {
-        println!("Dropping CustomSmatPointer with data `{}`!", self.data);
-    }
-}
+use std::iter;
 
 fn main() {
+    let v = vec!['a', 'b', 'c'];
+    for (index, value) in v.iter().enumerate() {
+        println!("{} is at index {}", value, index);
+    }
     let x = 5;
-    let y = Box::new(x);
-    assert_eq!(5, *y);
-    let a = 3;
-    let b = MyBox::new(a);
-    assert_eq!(3, *b);
-    let c = CustomSmatPointer{
-        data: String::from("my stuff"),
+    let (x, y, z) = (1, 2, 3);
+    let (x, y) = (1, 2, 3, 4, 5, 6);
+    let x = 5;
+    match x {
+        1..=5 => println!("x is {}", x),
+        _ => println!("some thing else"),
+    }
+    let numbers = (2, 4, 8, 16, 32);
+    match numbers {
+        (first, .., last) => {
+            println!("some numbers: {first}, {last}");
+        }
+    }
+    if let [first, rest @ ..] = &numbers[..] {}
+}
+
+enum Message {
+    Hello { id: i32 },
+}
+fn test() {
+    let msg = Message::Hello { id: 5 };
+    match msg {
+        Message::Hello {
+            id: id_variable @ 5..,
+        } => println!("Found an id in range:{}", id_variable),
+        _ => println!(""),
     };
-    drop(c);
-    let d = CustomSmatPointer{
-        data: String::from("other stuff"),
-    };
-    println!("CustomSmatPointer created");
 }
