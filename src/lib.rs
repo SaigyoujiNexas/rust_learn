@@ -93,7 +93,7 @@ pub struct PendingReviewPost {
 
 impl PendingReviewPost {
     pub fn approve(self) -> Post {
-        Post::new();
+        Post::new()
     }
 }
 trait State {
